@@ -102,10 +102,26 @@ public class ContactPickerDelegate : NSObject, CNContactPickerDelegate {
                     "label": label
                 ],
                 ] as [String : Any]
+            print(dict)
             result(dict)
         }
     }
+
+    @available(iOS 9.0, *)
+     public func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        var fullName = CNContactFormatter.string(from: contact, style: CNContactFormatterStyle.fullName)
+        let numbers: Array<String> = contact.phoneNumbers.compactMap { $0.value.stringValue as String }
+        let dict = [
+            "fullName": fullName as Any,
+            type: [
+                type: numbers.first ?? "",
+                "label": stringifyLabel(label: "mobile")
+            ],
+        ]  as [String : Any]
+         result(dict)
     
+     }
+
     private func stringifyLabel(label: String?) -> String {
         if(label == nil) {
             return ""
