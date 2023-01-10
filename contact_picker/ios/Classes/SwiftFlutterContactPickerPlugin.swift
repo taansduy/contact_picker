@@ -17,6 +17,7 @@ public class SwiftFlutterContactPickerPlugin: NSObject, FlutterPlugin {
         let controller = CNContactPickerViewController()
         pickerDelegate = ContactPickerDelegate(result: result, type: type)
         controller.delegate = pickerDelegate
+        controller.predicateForSelectionOfContact = NSPredicate(format:"phoneNumbers.@count== 1")
         if(neededProperty != nil) {
             controller.displayedPropertyKeys = [neededProperty!]
         } else {
