@@ -49,7 +49,7 @@ class ContactPicker private constructor(private val pickContext: PickContext, pr
             }
         } catch (e: CursorIndexOutOfBoundsException) {
             if (e.message == "Index 0 requested, with a size of 0") {
-                this.result.error("PERMISSION_ERROR", "It looks like this custom ROM requires the READ_CONTACTS permission. You can see how to obtain the permission here: https://github.com/DRSchlaubi/contact_picker/blob/master/README.md#permissions", ContactPickingException(e).stackTraceToString())
+                this.result.error("PERMISSION_ERROR", "It looks like this custom ROM requires the READ_CONTACTS permission. You can see how to obtain the permission here: https://github.com/DRSchlaubi/contact_picker/blob/master/README.md#permissions", ContactPickingException(e).toString())
             } else throw e //Throw normal exception if edge case is not the case
         }
         return true
