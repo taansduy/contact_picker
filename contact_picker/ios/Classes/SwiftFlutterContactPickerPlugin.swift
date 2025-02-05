@@ -28,11 +28,25 @@ public class SwiftFlutterContactPickerPlugin: NSObject, FlutterPlugin {
                 CNContactInstantMessageAddressesKey
             ]
         }
-        var viewController = UIApplication.shared.delegate?.window??.rootViewController
-        while ((viewController?.presentedViewController) != nil) {
-            viewController = viewController?.presentedViewController
+        // find proper keyWindow
+        var keyWindow: UIWindow? = nil
+        if #available(iOS 13, *) {
+            keyWindow = UIApplication.shared.connectedScenes.filter {
+                $0.activationState == .foregroundActive
+            }.compactMap { $0 as? UIWindowScene
+            }.first?.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
+        } else {
+            keyWindow = UIApplication.shared.keyWindow
         }
-        viewController?.present(controller, animated: true, completion: nil)
+        
+        // Get the topmost view controller instead of just the root
+        if let rootViewController = keyWindow?.rootViewController {
+            var topController = rootViewController
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            topController.present(controller, animated: true, completion: nil)
+        }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
